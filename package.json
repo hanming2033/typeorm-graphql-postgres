@@ -1,0 +1,33 @@
+{
+  "name": "postgres-graphql",
+  "version": "0.0.1",
+  "description": "Awesome project developed with TypeORM.",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.1",
+    "@types/node": "^10.1.2",
+    "@types/uuid": "^3.4.3",
+    "gql2ts": "^1.8.0",
+    "nodemon": "^1.17.5",
+    "ts-node": "6.0.5",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typescript": "2.8.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "graphql-yoga": "^1.14.5",
+    "pg": "^7.4.3",
+    "reflect-metadata": "^0.1.12",
+    "typeorm": "0.2.6",
+    "uuid": "^3.2.1"
+  },
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts",
+    "gentypes": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 140,
+    "singleQuote": true
+  }
+}
