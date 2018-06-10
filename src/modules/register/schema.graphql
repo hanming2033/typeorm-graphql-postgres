@@ -1,0 +1,8 @@
+type Query {
+  # there is a bug in graphql-tools, schema must contain a query and mutation
+  bye: String
+}
+
+type Mutation {
+  register(email: String!, password: String!): Boolean!
+}

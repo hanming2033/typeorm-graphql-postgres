@@ -1,10 +1,29 @@
+import * as fs from 'fs'
+import { importSchema } from 'graphql-import'
 import { GraphQLServer } from 'graphql-yoga'
-import { resolvers } from './resolvers'
+import * as path from 'path'
 import { createTypeOrmConn } from './utils/createTypeOrmConn'
+import { mergeSchemas, makeExecutableSchema } from 'graphql-tools'
+import { GraphQLSchema } from 'graphql'
 
 // export the function so Jest can test it
 export const startServer = async () => {
-  const server = new GraphQLServer({ typeDefs: 'src/schema.graphql', resolvers })
+  // create a holder to keep all the schemas
+  const schemas: GraphQLSchema[] = []
+
+  // read all folders in modules folder into an array
+  const folders = fs.readdirSync(path.join(__dirname, './modules'))
+
+  // loop through each folder, get the resolvers and schema.graphql and make it a schema array
+  folders.forEach(folder => {
+    const { resolvers } = require(`./modules/${folder}/resolvers`)
+    const typeDefs = importSchema(path.join(__dirname, `./modules/${folder}/schema.graphql`))
+    schemas.push(makeExecutableSchema({ resolvers, typeDefs }))
+  })
+
+  // create the graphql server by merging all the schemas
+  const server = new GraphQLServer({ schema: mergeSchemas({ schemas }) })
+
   // createConnection will sync our schema to the database
   // because "synchronize": true in ormconfig
   await createTypeOrmConn()
