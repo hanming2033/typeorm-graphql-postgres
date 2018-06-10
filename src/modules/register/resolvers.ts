@@ -8,6 +8,11 @@ export const resolvers: IResolverMap = {
   },
   Mutation: {
     register: async (_, { email, password }: GQL.IRegisterOnMutationArguments) => {
+      // check if user already exist
+      const userAlreadyExist = await User.findOne({ where: { email }, select: ['id'] })
+      // return error object if user taken
+      if (userAlreadyExist) return [{ path: 'email', message: 'already taken' }]
+
       // store the password that the user entered as a hash
       const hashedPassword = await bcrypt.hash(password, 10)
       // User.create simply creates an object
@@ -15,11 +20,9 @@ export const resolvers: IResolverMap = {
         email,
         password: hashedPassword
       })
-      // TODO: conditional return true or false
       // TODO: confirmation email
-      // TODO: no duplicate email
       await user.save()
-      return true
+      return null
     }
   }
 }

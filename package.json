@@ -42,8 +42,7 @@
     "graphql-yoga": "^1.14.7",
     "pg": "^7.4.3",
     "reflect-metadata": "^0.1.12",
-    "typeorm": "0.2.7",
-    "uuid": "^3.2.1"
+    "typeorm": "0.2.7"
   },
   "prettier": {
     "semi": false,
