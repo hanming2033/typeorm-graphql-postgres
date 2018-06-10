@@ -16,7 +16,7 @@ export class User extends BaseEntity {
 
   // BeforeInsert will run and do anything right before it is inserted into database
   @BeforeInsert()
-  addId = () => {
+  addId() {
     this.id = uuidv4()
   }
 }
