@@ -3,13 +3,14 @@ import * as yup from 'yup'
 import { User } from '../../entity/User'
 import { IResolverMap } from '../../types/graphql-utils'
 import { formatYupError } from '../../utils/formatYupError'
-import { EMAIL_DUPLICATE, EMAIL_TOO_SHORT  } from './errorMessages'
+import { EMAIL_DUPLICATE, EMAIL_TOO_SHORT } from './errorMessages'
+import { createConfirmEmailLink } from '../../utils/createConfirmEmailLink'
 
 // *schema for email pattern validation using yup
 const schema = yup.object().shape({
   email: yup
     .string()
-    .min(3, EMAIL_TOO_SHORT )
+    .min(3, EMAIL_TOO_SHORT)
     .max(255)
     .email(),
   password: yup
@@ -23,7 +24,7 @@ export const resolvers: IResolverMap = {
     bye: () => 'bye'
   },
   Mutation: {
-    register: async (_, args: GQL.IRegisterOnMutationArguments) => {
+    register: async (_, args: GQL.IRegisterOnMutationArguments, { redis, url }) => {
       try {
         await schema.validate(args, { abortEarly: false })
       } catch (error) {
@@ -46,9 +47,14 @@ export const resolvers: IResolverMap = {
         email,
         password: hashedPassword
       })
-      // TODO: confirmation email
+
       await user.save()
+
+      const link = await createConfirmEmailLink(url, user.id, redis)
+
       return null
     }
   }
 }
+
+// TODO: https://www.youtube.com/watch?v=vKzXklv1qUA

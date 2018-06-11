@@ -5,6 +5,8 @@ import * as path from 'path'
 import { createTypeOrmConn } from './utils/createTypeOrmConn'
 import { mergeSchemas, makeExecutableSchema } from 'graphql-tools'
 import { GraphQLSchema } from 'graphql'
+import * as Redis from 'ioredis'
+import { User } from './entity/User'
 
 // export the function so Jest can test it
 export const startServer = async () => {
@@ -21,8 +23,18 @@ export const startServer = async () => {
     schemas.push(makeExecutableSchema({ resolvers, typeDefs }))
   })
 
+  // create redis instance
+  const redis = new Redis()
+
   // create the graphql server by merging all the schemas
-  const server = new GraphQLServer({ schema: mergeSchemas({ schemas }) })
+  const server = new GraphQLServer({ schema: mergeSchemas({ schemas }), context: ({request}) => ({ redis,url: `${request.protocol}://${request.get('host')}` }) })
+
+  server.express.get('confirm/:id', async (req, res) => {
+    const { id } = req.params
+    const userId = await redis.get(id)
+    await User.update({ id: userId }, { confirmed: true })
+    res.send('ok')
+  })
 
   // createConnection will sync our schema to the database
   // because "synchronize": true in ormconfig
