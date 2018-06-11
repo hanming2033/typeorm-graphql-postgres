@@ -26,6 +26,7 @@
     "@types/jest": "^23.0.0",
     "@types/node": "^10.3.1",
     "@types/uuid": "^3.4.3",
+    "@types/yup": "^0.24.6",
     "gql2ts": "^1.8.0",
     "jest": "^23.1.0",
     "nodemon": "^1.17.5",
@@ -42,7 +43,8 @@
     "graphql-yoga": "^1.14.7",
     "pg": "^7.4.3",
     "reflect-metadata": "^0.1.12",
-    "typeorm": "0.2.7"
+    "typeorm": "0.2.7",
+    "yup": "^0.25.1"
   },
   "prettier": {
     "semi": false,
