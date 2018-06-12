@@ -70,4 +70,3 @@ describe('Registering User', async () => {
     })
   })
 })
-// TODO: https://www.youtube.com/watch?v=JMLTlMAejX4 16:30

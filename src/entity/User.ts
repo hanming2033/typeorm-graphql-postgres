@@ -24,5 +24,3 @@ export class User extends BaseEntity {
   //   this.id = uuidv4()
   // }
 }
-
-// TODO: https://www.youtube.com/watch?v=JMLTlMAejX4

@@ -47,14 +47,14 @@ export const resolvers: IResolverMap = {
         email,
         password: hashedPassword
       })
-
+      // save user to database
       await user.save()
 
+      // generate a link for confirmation.
+      // custom function: takes the url of the site http://my-site.com, user id in db and redis client
       const link = await createConfirmEmailLink(url, user.id, redis)
 
       return null
     }
   }
 }
-
-// TODO: https://www.youtube.com/watch?v=vKzXklv1qUA
